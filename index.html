@@ -101,9 +101,7 @@
 
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        let s = "userid " + userid;
-        s += "prof name" + profName.innerText;
-        tg.sendData(s);
+        tg.sendData("data");
         //при клике на основную кнопку отправляем данные в строковом виде
     });
 
