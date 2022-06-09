@@ -21,6 +21,7 @@ import (
 
 func main() {
 
+	runGin()
 	InitConfig()
 	lgr.Printf("[INFO] Super users: " + strings.Join(conf.SuperUsers, ","))
 

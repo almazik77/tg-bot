@@ -13,7 +13,7 @@ type pg struct {
 	User            string        `env:"USER,notEmpty"  envExpand:"true" envDefault:"postgres"`
 	Pass            string        `env:"PASSWORD,notEmpty"  envExpand:"true" envDefault:"postgres"`
 	Host            string        `env:"ADDR,notEmpty"  envExpand:"true" envDefault:"localhost"`
-	Port            int           `env:"PORT,notEmpty"  envExpand:"true"  envDefault:"5432"`
+	Port            int           `env:"PORT,notEmpty"  envExpand:"true"  envDefault:"5420"`
 	Db              string        `env:"DATABASE,notEmpty"  envExpand:"true" envDefault:"technokratos-bot"`
 	Params          string        `env:"PARAMS,notEmpty" envDefault:"sslmode=disable&application_name=technokratos-bot"  envExpand:"true"`
 	MaxOpenConn     int           `env:"MAX_OPEN_CONN" envDefault:"10"`

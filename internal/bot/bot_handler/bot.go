@@ -46,6 +46,8 @@ func (b *BotApp) Handle(u *tgbot.Update) {
 		return
 	}
 
+	//b.view.SendInvoice(u)
+
 	b.view.SendMessage(u)
 
 }

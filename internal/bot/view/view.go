@@ -240,3 +240,31 @@ func (v *View) SendMessage2(text string, u *tgbot.Update) {
 
 	_, _ = logIfError(v.tg.Send(msg))
 }
+
+func (v *View) SendInvoice(u *tgbot.Update) {
+
+	prices := make([]tgbotapi.LabeledPrice, 0)
+	prices = append(prices, tgbotapi.LabeledPrice{
+		Label:  "1 piece",
+		Amount: 1000 * 100,
+	})
+	prices = append(prices, tgbotapi.LabeledPrice{
+		Label:  "2 pieces",
+		Amount: 1500 * 100,
+	})
+	tips := []int{2 * 100, 3 * 100, 5 * 100, 7 * 100}
+	invoice := tgbotapi.InvoiceConfig{
+		BaseChat:            tgbotapi.BaseChat{ChatID: u.GetChatId()},
+		Title:               "test",
+		Description:         "test descr",
+		Payload:             "\"{js\":\"123\"}",
+		ProviderToken:       "381764678:TEST:38028",
+		Currency:            "RUB",
+		Prices:              prices,
+		SuggestedTipAmounts: tips,
+		MaxTipAmount:        14 * 100,
+		ProviderData:        "{\"shopId\":506751, \"shopArticleId\": 538350}",
+	}
+
+	_, _ = logIfError(v.tg.Send(invoice))
+}

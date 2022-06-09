@@ -1,0 +1,65 @@
+image: golang:1.17
+
+stages:
+  - build
+  - lint
+  - publish-image
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "Running build"
+    - make build
+  tags: [ shell ]
+  only:
+    - merge_requests
+
+lint:
+  stage: lint
+  script:
+    - |
+      curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.45.2
+      curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.45.2
+      wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.45.2
+      ./bin/golangci-lint run
+
+  tags: [ shell ]
+  only:
+    - merge_requests
+
+publish:
+  stage: publish-image
+  variables:
+    DOCKER_REGISTRY_URL: $CI_REGISTRY
+    DOCKER_REGISTRY_USERNAME: gitlab-ci-token
+    DOCKER_REGISTRY_PASSWORD: $CI_BUILD_TOKEN
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+  script:
+    - make docker
+  tags: [ shell ]
+  only: [ master, develop]
+
+.deploy:
+  stage: deploy
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - export COMPOSE="docker-compose -f docker-compose.yaml -p technokratos-bot"
+    - export DOCKER_HOST=$HOST
+    - export DOCKER_TLS_VERIFY=1
+    - export IMAGE_VERSION=$CI_BUILD_REF_NAME-$CI_COMMIT_SHORT_SHA
+    - $COMPOSE up --detach
+  tags: [ shell ]
+
+deploy_dev:
+  extends: .deploy
+  only: [develop]
+  environment:
+    name: develop
+
+deploy_prod:
+  extends: .deploy
+  only: [master]
+  environment:
+    name: master

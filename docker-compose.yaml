@@ -1,0 +1,33 @@
+version: '3.3'
+
+volumes:
+  pgdata_technokratos_bot:
+
+services:
+  hackathon-telegram-bot-team5:
+    restart: always
+    depends_on:
+      - technokratos-telegram-bot-db
+    image: docker.technokratos.com/go/bots/technokratos-bot:${IMAGE_VERSION}
+    environment:
+      - LOG_LEVEL=$LOG_LEVEL
+      - TG_TOKEN=$TG_TOKEN
+      - DB_PASSWORD=$PG_PASSWORD
+      - DB_ADDR=technokratos-telegram-bot-db
+      - SUPER_USER=$SUPER_USER
+    networks:
+      - technokratos-bot
+
+  hackathon-telegram-bot-team5-db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=$PG_PASSWORD
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=technokratos-bot
+    volumes:
+      - pgdata_technokratos_bot:/var/lib/postgresql
+    networks:
+      - technokratos-bot
+
+networks:
+  technokratos-bot:
