@@ -27,7 +27,7 @@ services:
     volumes:
       - pgdata_technokratos_bot:/var/lib/postgresql
     networks:
-      - technokratos-bot
+      - technokratos-bot1
 
 networks:
   technokratos-bot:
