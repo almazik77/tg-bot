@@ -17,5 +17,5 @@ docker_publish:
 	docker push $(DOCKER_IMAGE_NAME):$(CI_BUILD_REF_NAME)-$(CI_COMMIT_SHORT_SHA)
 
 run_server:
-	 LOG_LEVEL=debug $(BINARY_NAME)
+	 LOG_LEVEL=info
 
